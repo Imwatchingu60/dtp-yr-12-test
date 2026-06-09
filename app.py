@@ -6,6 +6,5 @@ app= Flask(__name__)
 def home():
     #home page
     return "oh my gosh "
-
-if __name__ == "__main__":
+if __name__=='__main__':
     app.run(debug=True)
