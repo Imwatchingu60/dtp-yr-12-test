@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ flower['name']}}</h1>
+<p><em>{{ flower['latin'] }}</em></p>
+
+<ul>
+    <li>Bloom season: {{ flower['season'] }}</li>
+    <li>Sunlight: {{ flower['sunlight'] }}</li>
+    <li>Watering: {{ flower['watering'] }}</li>
+    <li>Difficulty: {{ flower['difficulty'] }}</li>
+</ul>
+
+<p><a href="{{ url_for('flowers') }}">&larr; Back to all Flowers</a></p>
+{% endblock %}

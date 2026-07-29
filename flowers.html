@@ -1,0 +1,10 @@
+{% entends "base.html" %}
+
+{% for flower in flowers %}
+<div>
+    <h2><a href="{{ url_for('flower_detail',id=flower['id']) }}">{{ flower['name'] }}</a></h2>
+    <p><em>{{ flower['latin'] }}</em>&middot; blooms in {{ flower['season'] }}</p>
+</div>
+{% endfor %}
+
+{% endblock %}
