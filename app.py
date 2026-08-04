@@ -1,25 +1,70 @@
-from flask import Flask, render_template
+import sqlite3
+
+from flask import Flask, g, render_template
 
 app = Flask(__name__, template_folder='.')
 
-FLOWERS={'id':1,'name':'Sunflower','latin':'Helianthus annuus','season':'Summer','sunlight':'Full Sun','watering':'Medium','difficulty': 'Easy'},{'id':2, 'name':'Rose','latin':'Rosa','season':'Spring-Autumn','sunlight':'Full Sun','watering':'Medium','difficulty':'Hard'},{'id':3,'name':'Lavender','latin':'lavare','season':'Summer','sunlight':'Full Sun','watering':'Low','difficulty':'Easy'},
+DATABASE = "database.db"
+
+def get_db():
+    """Open one database connection fot the current request."""
+    db= getattr(g,"_database", None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+        db.row_factory = sqlite3.Row
+        db.execute("PRAGMA foreign_kets = ON")
+    return db
+
+
+@app.teardown_appcontext
+def close_connection(exception):
+    """Close the request's database connection, if one was opened"""
+    db = getattr(g,"_database", None)
+    if db is not None:
+        db.close()
 
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/flowers')
+@app.route("/flowers")
 def flowers():
-    return render_template('flowers.html',flowers=FLOWERS)
+    db = get_db()
+    flower_list = db.execute(
+        """
+        SELECT flowers.*,
+               colours.name AS category
+        FROM flowers
+        JOIN colours
+          ON flower.colour_id = colours.id
+        JOIN categories
+          ON flowers.category_id = categories.id
+        ORDER BY flowers.name
+        """
+    ).fetchall()
+
+    return render_template('flowers.html',flowers=flower_list)
 
 
-@app.route('/flower/<int:id>')
+@app.route("/flower/<int:id>")
 def flower_detail(id):
-    flower = None
-    for f in FLOWERS:
-        if f['id'] == id:
-            flower = f
+    db = get_db()
+    flower = db.execute(
+        """
+        SELECT flowers.*,
+               colours.name AS category
+        FROM flowers
+        JOIN colours
+          ON flower.colour_id = colours.id
+        JOIN categories
+          ON flowers.category_id = categories.id
+        WHERE flowers.id = ?
+        """,
+        (id,),
+
+    ).fetchone()
+    
     return render_template('flower.html', flower=flower)
 
 if __name__ =='__main__':
