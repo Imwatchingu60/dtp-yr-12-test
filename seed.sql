@@ -13,5 +13,4 @@ INSERT INTO flowers
 VALUES
    (1,'Sunflower','Helianthus annuus','Summer','Full Sun','Medium','Easy',1,1)
    (2, 'Rose','Rosa','Spring-Autumn','Full Sun','Medium','Hard',2,3)
-   (3,'Lavender','lavare', 'Summer','Full Sun','Low','Easy',3,3)
-   
+   (3,'Lavender','lavare', 'Summer','Full Sun','Low','Easy',3,2)
