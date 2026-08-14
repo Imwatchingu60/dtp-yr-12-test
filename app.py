@@ -33,7 +33,7 @@ def flowers():
     db = get_db()
     flower_list = db.execute(
         """
-        SELECT flowers.*,
+        SELECT.*,
                colours.name AS category
         FROM flowers
         JOIN colours
