@@ -33,11 +33,11 @@ def flowers():
     db = get_db()
     flower_list = db.execute(
         """
-        SELECT.*,
+        SELECT *,
                colours.name AS category
         FROM flowers
         JOIN colours
-          ON flower.colour_id = colours.id
+          ON flowers.colour_id = colours.id
         JOIN categories
           ON flowers.category_id = categories.id
         ORDER BY flowers.name
@@ -56,7 +56,7 @@ def flower_detail(id):
                colours.name AS category
         FROM flowers
         JOIN colours
-          ON flower.colour_id = colours.id
+          ON flowers.colour_id = colours.id
         JOIN categories
           ON flowers.category_id = categories.id
         WHERE flowers.id = ?
