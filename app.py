@@ -1,8 +1,8 @@
 import sqlite3
 
-from flask import Flask, g, render_template
+from flask import Flask, g, redirect, render_template, request, url_for
 
-app = Flask(__name__, template_folder='.')
+app = Flask(__name__, template_folder='.', static_folder="static", static_url_path="/static",)
 
 DATABASE = "database.db"
 
