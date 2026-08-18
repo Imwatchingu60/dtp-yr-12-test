@@ -1,15 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="flower_detail">
 <h1>{{ flower['name']}}</h1>
 <p><em>{{ flower['latin'] }}</em></p>
 
 <ul>
+    <li>Colour:{{flower['colour']}}</li>
+    <li>Category:{{flower['category']}}</li>
     <li>Bloom season: {{ flower['season'] }}</li>
     <li>Sunlight: {{ flower['sunlight'] }}</li>
     <li>Watering: {{ flower['watering'] }}</li>
     <li>Difficulty: {{ flower['difficulty'] }}</li>
 </ul>
 
+<p><a href="{{ url_for('edit_flower', id=flower['id'])}}">Edit this flower</a></p>
 <p><a href="{{ url_for('flowers') }}">&larr; Back to all Flowers</a></p>
+</div>
 {% endblock %}
