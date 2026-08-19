@@ -1,3 +1,4 @@
+-- database: database.db
 PRAGMA foreign_keys = ON;
 
 DROP TABLE IF EXISTS flowers;

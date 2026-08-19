@@ -46,7 +46,7 @@ def validate_flower(form):
 
     return errors
 
-deef get_form_choices(db):
+def get_form_choices(db):
     """Read the rows used by the two database-backed select controls."""
     colours = db.execute(
         "SELECT id, name FROM colours ORDER BY name"
@@ -54,7 +54,7 @@ deef get_form_choices(db):
     categories = db.execute(
         "SELECT id, name FROM categories ORDER BY name"
     ).fetchall()
-    return colours, categorie
+    return colours, categories
 
 def submitted_flower(form):
     """Put the submitted values in the same order as the SQL columns."""
@@ -67,7 +67,8 @@ def submitted_flower(form):
         form.get("difficulty", ""),
         form.get("colour_id", ""),
         form.get("category_id", "")
-        
+    )
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -78,7 +79,8 @@ def flowers():
     flower_list = db.execute(
         """
         SELECT *,
-               colours.name AS category
+               colours.name AS colour,
+               categories.name AS category
         FROM flowers
         JOIN colours
           ON flowers.colour_id = colours.id
@@ -97,7 +99,8 @@ def flower_detail(id):
     flower = db.execute(
         """
         SELECT flowers.*,
-               colours.name AS category
+               colours.name AS colour
+                categories.name AS category
         FROM flowers
         JOIN colours
           ON flowers.colour_id = colours.id
