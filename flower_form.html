@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ action }} a Flower</h1>
+
+{% if errors %}
+<div class="form-errors">
+    <p>Please fix these problems:</p>
+    <ul>
+        {% for error in errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<form method="post" class="flower-form">
+    <label for="name">Name
+        <input id="name" name="name" type="text"
+               value="{{ flower.get('name', '') }}" required>
+    </label>
+
+    <label for="latin">Latin name
+        <input id="latin" name="latin" type="text"
+               value="{{ flower.get('latin', '') }}">
+    </label>
+
+    <label for="colour_id">Colour
+        <select id="colour_id" name="colour_id" required>
+            <option value="">Choose a colour</option>
+            {% for colour in colours %}
+            <option value="{{ colour['id'] }}"
+                    {% if flower.get('colour_id', '')|string == colour['id']|string %}selected{% endif %}>
+                {{ colour['name'] }}
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label for="category_id">Category
+        <select id="category_id" name="category_id" required>
+            <option value="">Choose a category</option>
+            {% for category in categories %}
+            <option value="{{ category['id'] }}"
+                    {% if flower.get('category_id', '')|string == category['id']|string %}selected{% endif %}>
+                {{ category['name'] }}
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <div class="field">
+        <span>Bloom season</span>
+        <details class="ms">
+            <summary>{{ picked_seasons|length ~ ' chosen' if picked_seasons else 'Choose seasons' }}</summary>
+            <div class="ms-list">
+                {% for value in ['Spring', 'Summer', 'Autumn', 'Winter'] %}
+                <label><input type="checkbox" name="season" value="{{ value }}"
+                    {% if value in picked_seasons %}checked{% endif %}> {{ value }}</label>
+                {% endfor %}
+            </div>
+        </details>
+    </div>
+
+    <label for="sunlight">Sunlight
+        <select id="sunlight" name="sunlight">
+            {% for value in ['Full Sun', 'Partial Shade', 'Shade'] %}
+            <option {% if flower.get('sunlight', '') == value %}selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label for="watering">Watering
+        <select id="watering" name="watering">
+            {% for value in ['Low', 'Medium', 'High'] %}
+            <option {% if flower.get('watering', '') == value %}selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label for="difficulty">Difficulty
+        <select id="difficulty" name="difficulty">
+            {% for value in ['Easy', 'Medium', 'Hard'] %}
+            <option {% if flower.get('difficulty', '') == value %}selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <button type="submit">{{ action }} Flower</button>
+</form>
+
+<div class="flower-detail">
+    <h1 id="preview-name">Flower name</h1>
+    <p><em id="preview-latin">Latin name</em></p>
+
+    <ul>
+        <li>Colour: <span id="preview-colour">Not selected</span></li>
+        <li>Category: <span id="preview-category">Not selected</span></li>
+        <li>Bloom season: <span id="preview-season">Not selected</span></li>
+        <li>Sunlight: <span id="preview-sunlight">Full Sun</span></li>
+        <li>Watering: <span id="preview-watering">Low</span></li>
+        <li>Difficulty: <span id="preview-difficulty">Easy</span></li>
+    </ul>
+</div>
+{% endblock %}

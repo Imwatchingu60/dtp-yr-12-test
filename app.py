@@ -23,7 +23,51 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
+def validate_flower(form):
+    """Return one message for each invalid field."""
+    errors = []
 
+    name = form.get("name", "").strip()
+    if not name:
+        errors.append("Name is required.")
+    elif len(name) > 50:
+        errors.append("Name must be 50 characters or fewer.")
+
+    if len(form.get("latin", "").strip()) > 80:
+        errors.append("Latin name must be 80 characters or fewer.")
+
+    if not form.getlist("season"):
+        errors.append("Choose at least one bloom season.")
+
+    if not form.get("colour_id", ""):
+        errors.append("Choose a colour.")
+    if not form.get("category_id", ""):
+        errors.append("Choose a category.")
+
+    return errors
+
+deef get_form_choices(db):
+    """Read the rows used by the two database-backed select controls."""
+    colours = db.execute(
+        "SELECT id, name FROM colours ORDER BY name"
+    ).fetchall()
+    categories = db.execute(
+        "SELECT id, name FROM categories ORDER BY name"
+    ).fetchall()
+    return colours, categorie
+
+def submitted_flower(form):
+    """Put the submitted values in the same order as the SQL columns."""
+    return (
+        form.get("name", "").strip(),
+        form.get("latin", "").strip(),
+        "-".join(form.getlist("season")),
+        form.get("sunlight", ""),
+        form.get("watering", ""),
+        form.get("difficulty", ""),
+        form.get("colour_id", ""),
+        form.get("category_id", "")
+        
 @app.route('/')
 def home():
     return render_template('index.html')
