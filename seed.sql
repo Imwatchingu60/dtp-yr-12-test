@@ -1,3 +1,7 @@
+-- database: database.db
+
+PRAGMA foreign_keys = ON;
+
 INSERT INTO colours (id,name) VALUES
     (1,'Yellow'),
     (2,'Red'),
