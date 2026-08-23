@@ -1,17 +1,122 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>All Flowers
-    
-</h1>
+<h1>All Flowers</h1>
+
+<p class="quick-search">
+    <label for="quick-search">Quick search on this page</label>
+    <input id="quick-search" type="text"
+           placeholder="Type a name, colour, category, or season">
+</p>
+
+<details class="filter-panel" {% if filters %}open{% endif %}>
+    <summary>Filter flowers</summary>
+    <form method="get" action="{{ url_for('flowers') }}" class="filter-form">
+        <div class="field">
+            <span class="field-name">Name or Latin contains</span>
+            <input type="text" name="name"
+                   value="{{ filters.get('name', '') }}">
+        </div>
+        <div class="field">
+            <span class="field-name">Season</span>
+            <details class="ms">
+                {% set picked = filters.getlist('season') %}
+                <summary>{{ picked|length ~ ' chosen' if picked else 'Any' }}</summary>
+                <div class="ms-list">
+                    {% for value in ['Spring', 'Summer', 'Autumn', 'Winter'] %}
+                    <label><input type="checkbox" name="season" value="{{ value }}"
+                        {% if value in picked %}checked{% endif %}> {{ value }}</label>
+                    {% endfor %}
+                </div>
+            </details>
+        </div>
+        <div class="field">
+            <span class="field-name">Colour</span>
+            <details class="ms">
+                {% set picked = filters.getlist('colour_id') %}
+                <summary>{{ picked|length ~ ' chosen' if picked else 'Any' }}</summary>
+                <div class="ms-list">
+                    {% for colour in colours %}
+                    <label><input type="checkbox" name="colour_id" value="{{ colour['id'] }}"
+                        {% if colour['id']|string in picked %}checked{% endif %}> {{ colour['name'] }}</label>
+                    {% endfor %}
+                </div>
+            </details>
+        </div>
+        <div class="field">
+            <span class="field-name">Category</span>
+            <details class="ms">
+                {% set picked = filters.getlist('category_id') %}
+                <summary>{{ picked|length ~ ' chosen' if picked else 'Any' }}</summary>
+                <div class="ms-list">
+                    {% for category in categories %}
+                    <label><input type="checkbox" name="category_id" value="{{ category['id'] }}"
+                        {% if category['id']|string in picked %}checked{% endif %}> {{ category['name'] }}</label>
+                    {% endfor %}
+                </div>
+            </details>
+        </div>
+        <div class="field">
+            <span class="field-name">Sunlight</span>
+            <details class="ms">
+                {% set picked = filters.getlist('sunlight') %}
+                <summary>{{ picked|length ~ ' chosen' if picked else 'Any' }}</summary>
+                <div class="ms-list">
+                    {% for value in ['Full Sun', 'Partial Shade', 'Shade'] %}
+                    <label><input type="checkbox" name="sunlight" value="{{ value }}"
+                        {% if value in picked %}checked{% endif %}> {{ value }}</label>
+                    {% endfor %}
+                </div>
+            </details>
+        </div>
+        <div class="field">
+            <span class="field-name">Watering</span>
+            <details class="ms">
+                {% set picked = filters.getlist('watering') %}
+                <summary>{{ picked|length ~ ' chosen' if picked else 'Any' }}</summary>
+                <div class="ms-list">
+                    {% for value in ['Low', 'Medium', 'High'] %}
+                    <label><input type="checkbox" name="watering" value="{{ value }}"
+                        {% if value in picked %}checked{% endif %}> {{ value }}</label>
+                    {% endfor %}
+                </div>
+            </details>
+        </div>
+        <div class="field">
+            <span class="field-name">Difficulty</span>
+            <details class="ms">
+                {% set picked = filters.getlist('difficulty') %}
+                <summary>{{ picked|length ~ ' chosen' if picked else 'Any' }}</summary>
+                <div class="ms-list">
+                    {% for value in ['Easy', 'Medium', 'Hard'] %}
+                    <label><input type="checkbox" name="difficulty" value="{{ value }}"
+                        {% if value in picked %}checked{% endif %}> {{ value }}</label>
+                    {% endfor %}
+                </div>
+            </details>
+        </div>
+        <p class="filter-hint">
+            Open a menu and tick as many values as you like.
+            Tick nothing to allow every value.
+        </p>
+        <button type="submit">Apply filter</button>
+    </form>
+</details>
+
+<p class="filter-count">
+    {{ flowers|length }} flower{{ "s" if flowers|length != 1 }} shown
+</p>
+
 {% for flower in flowers %}
 <div>
-    <h2><a href="{{ url_for('flower_detail',id=flower['id']) }}">{{ flower['name'] }}</a></h2>
-    <p><em>{{ flower['latin'] }}</em>
-        &middot; {{flower['colour'] }}
+    <h2><a href="{{ url_for('flower_detail', id=flower['id']) }}">{{ flower['name'] }}</a></h2>
+    <p>
+        <em>{{ flower['latin'] }}</em>
+        &middot; {{ flower['colour'] }}
         &middot; {{ flower['category'] }}
-        &middot; blooms in {{ flower['season'] }}</p>
+        &middot; blooms in {{ flower['season'] }}
+    </p>
 </div>
 {% endfor %}
 
-{% endblock %}
+{% endblock %}，
