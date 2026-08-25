@@ -138,6 +138,9 @@ def flowers():
         filters=request.args,
     )
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404-video.html"),404
 
 @app.route("/flower/<int:id>")
 def flower_detail(id):
@@ -158,7 +161,7 @@ def flower_detail(id):
     ).fetchone()
 
     if flower is None:
-        return "Flower not found", 404
+        return render_template("404.html"), 404
 
     return render_template("flower.html", flower=flower)
 

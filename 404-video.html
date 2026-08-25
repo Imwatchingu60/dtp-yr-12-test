@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="error-content">
+    <h1>🌿 404</h1>
+    <p>Page Not Found</p>
+    <p><a href="{{ url_for('home') }}">← Go back Home</a></p>
+</div>
+<video controls src="{{url_for('static',filename='videos/2294830592633478f82db550b2760deb.mp4')}}">
+    
+</video>
+{% endblock %}

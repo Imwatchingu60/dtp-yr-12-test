@@ -1,6 +1,9 @@
 -- database: database.db
 
 PRAGMA foreign_keys = ON;
+DELETE FROM colours;
+DELETE FROM categories;
+DELETE FROM flowers;
 
 INSERT INTO colours (id,name) VALUES
     (1,'Yellow'),
