@@ -255,6 +255,16 @@ def edit_flower(id):
         picked_seasons=flower["season"].split("-"),
     )
 
+@app.route("/flower/<int:id>/delete", methods=["GET", "POST"])
+def delete_flower(id):
+    db = get_db()
+    db.execute(
+        "DELETE FROM flowers WHERE id = ?",
+        (id,),
+    )
+    db.commit()
+    return redirect(url_for("flowers"))
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
